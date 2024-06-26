@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/file_service.dart';
+import '../utils/snackbar_utils.dart';
 import '../widgets/custom_textField.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    addListeners();
     super.initState();
   }
 
@@ -77,13 +79,20 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   children: [
-                    _mainButton(() => null, "New File"),
+                    _mainButton(
+                      () => fileService.newFile(context),
+                      "New File",
+                    ),
                   ],
                 ),
                 Row(
                   children: [
-                    _actionButton(() => null, Icons.file_upload),
-                    _actionButton(() => null, Icons.folder),
+                    _actionButton(
+                      () => fileService.loadFile(context),
+                      Icons.file_upload,
+                    ),
+                    _actionButton(
+                        () => fileService.newDir(context), Icons.folder),
                   ],
                 )
               ],
@@ -112,7 +121,16 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 8.0),
             Row(
               children: [
-                _mainButton(() => null, "Save File"),
+                _mainButton(
+                    fileService.fieldsNotEmpty
+                        ? () {
+                            fileService.saveContent(context);
+                            fileService.titleController.clear();
+                            fileService.descController.clear();
+                            fileService.tagsController.clear();
+                          }
+                        : null,
+                    "Save File"),
               ],
             ),
           ],

@@ -51,6 +51,9 @@ class AppThemes {
           ),
         ),
       ),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: Colors.grey,
+      ),
     );
   }
 
