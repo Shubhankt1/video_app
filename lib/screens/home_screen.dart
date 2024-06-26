@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../services/file_service.dart';
 import '../widgets/custom_textField.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,9 +11,54 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController descController = TextEditingController();
-  final TextEditingController tagsController = TextEditingController();
+  // Initialise the file service
+  FileService fileService = FileService();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    removeListeners();
+    super.dispose();
+  }
+
+  void addListeners() {
+    List<TextEditingController> controllers = [
+      fileService.titleController,
+      fileService.descController,
+      fileService.tagsController,
+    ];
+
+    for (TextEditingController controller in controllers) {
+      controller.addListener(_onFieldChanged);
+    }
+  }
+
+  void _onFieldChanged() {
+    setState(
+      () {
+        fileService.fieldsNotEmpty =
+            fileService.titleController.text.isNotEmpty &&
+                fileService.descController.text.isNotEmpty &&
+                fileService.tagsController.text.isNotEmpty;
+      },
+    );
+  }
+
+  void removeListeners() {
+    List<TextEditingController> controllers = [
+      fileService.titleController,
+      fileService.descController,
+      fileService.tagsController,
+    ];
+
+    for (TextEditingController controller in controllers) {
+      controller.removeListener(_onFieldChanged);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,21 +93,21 @@ class _HomeScreenState extends State<HomeScreen> {
               maxLength: 100,
               maxLines: 1,
               hintText: "Enter Video Title",
-              controller: titleController,
+              controller: fileService.titleController,
             ),
             const SizedBox(height: 8.0),
             CustomTextField(
               maxLength: 5000,
               maxLines: 5,
               hintText: "Enter Video Description",
-              controller: descController,
+              controller: fileService.descController,
             ),
             const SizedBox(height: 8.0),
             CustomTextField(
               maxLength: 300,
               maxLines: 3,
               hintText: "Enter Video Tags",
-              controller: tagsController,
+              controller: fileService.tagsController,
             ),
             const SizedBox(height: 8.0),
             Row(
