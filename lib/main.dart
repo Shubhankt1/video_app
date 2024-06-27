@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:window_manager/window_manager.dart';
 
+import 'screens/splash_screen.dart';
 import 'utils/app_styles.dart';
-import 'screens/home_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await windowManager.ensureInitialized();
+  WindowOptions windowOptions = const WindowOptions(
+    minimumSize: Size(400, 550),
+    size: Size(450, 580),
+    center: true,
+    title: "Ting!",
+  );
+
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
+
   runApp(const MyApp());
 }
 
@@ -19,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: AppThemes.lightTheme(),
       darkTheme: AppThemes.darkTheme(),
       // themeMode: ThemeMode.dark,
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }

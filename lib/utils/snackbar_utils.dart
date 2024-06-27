@@ -11,7 +11,10 @@ class SnackBarUtils {
           children: [
             Icon(icon),
             const SizedBox(width: 8),
-            Text(message),
+            Wrap(
+              children: [Text(message)],
+              direction: Axis.vertical,
+            ),
           ],
         ),
       ),
