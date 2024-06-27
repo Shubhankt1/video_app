@@ -11,7 +11,7 @@ class SnackBarUtils {
           children: [
             Icon(icon),
             const SizedBox(width: 8),
-            Text(message),
+            Flexible(child: Text(message)),
           ],
         ),
       ),
